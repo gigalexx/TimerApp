@@ -56,3 +56,5 @@ Input has limitation  from 1 to 999 die to UI constraints(I didn’t have enough
 The app was tested on a few devices with   23<=  API <= 30
 
 Hope you like it !
+
+#Please use latest version of Android Studio 4.1+
