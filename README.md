@@ -51,10 +51,11 @@ Timer view show left time and has a progress bar which shows progress more visua
 
 When time is up to app show toast and plays a short melody. MediaPlayer also lives in ViewModel and properly stopped and release in case of end ViewModel lifecycle
 
-Input has limitation  from 1 to 999 die to UI constraints(I didn’t have enough time to implement a more flexible view) and has basic validation
+Input has limitation  from 1 to 999 due to UI constraints(I didn’t have enough time to implement a more flexible view) and has basic validation
 
 The app was tested on a few devices with   23<=  API <= 30
 
 Hope you like it !
 
 #Please use latest version of Android Studio 4.1+
+#Please use for build master branch
