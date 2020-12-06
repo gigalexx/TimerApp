@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">TimerApp</string>
+    <string name="welcome">Welcome</string>
+    <string name="please_enter_duration_in_seconds">Please enter duration in number of seconds</string>
+    <string name="duration">Duration</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+</resources>
