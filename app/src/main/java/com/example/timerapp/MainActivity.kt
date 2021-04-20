@@ -1,14 +1,17 @@
 package com.example.timerapp
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.View.OnFocusChangeListener
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.timerapp.databinding.ActivityMainBinding
 
+
+private const val IS_TIMER_VISIBLE = "isTimerVisible"
+private const val DURATION = "duration"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -22,11 +25,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
 
         viewModel =
-            ViewModelProvider(this, MainFactory(application)).get(TimerViewModel::class.java)
+                ViewModelProvider(this, MainFactory(application)).get(TimerViewModel::class.java)
 
-
-
-        viewModel.timerLiveData.observe(this, Observer {
+        viewModel.timerLiveData.observe(this, {
             binding.tvTimer.text = it
             binding.progressBar.progress = it.toInt()
             isTimesUp(it)
@@ -36,14 +37,12 @@ class MainActivity : AppCompatActivity() {
 
         initListeners()
 
-        if (savedInstanceState != null && savedInstanceState.getBoolean("isTimerVisible")) {
+        if (savedInstanceState != null && savedInstanceState.getBoolean(IS_TIMER_VISIBLE)) {
             flipCard(true)
-            var duration = savedInstanceState.getString("duration")
+            val duration = savedInstanceState.getString(DURATION)
             if (duration != null && duration.isNotEmpty()) binding.progressBar.max =
-                duration.toInt()
-
+                    duration.toInt()
         }
-
     }
 
     private fun isTimesUp(it: String?) {
@@ -52,7 +51,6 @@ class MainActivity : AppCompatActivity() {
             showTimesUpToast()
         }
     }
-
 
     private fun initListeners() {
         binding.btnStart.setOnClickListener {
@@ -70,7 +68,6 @@ class MainActivity : AppCompatActivity() {
                 binding.etLayout.error = null
             }
         }
-
     }
 
     private fun showError() {
@@ -80,7 +77,6 @@ class MainActivity : AppCompatActivity() {
     private fun showTimesUpToast() {
         Toast.makeText(this, "Time's up!", Toast.LENGTH_SHORT).show()
     }
-
 
     private fun flipCard(toTimer: Boolean) {
 
@@ -98,14 +94,21 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putBoolean("isTimerVisible", mIsTimerVisible)
-        if (mIsTimerVisible) outState.putString("duration", binding.progressBar.max.toString())
-
+        isFinishing
+        outState.putBoolean(IS_TIMER_VISIBLE, mIsTimerVisible)
+        if (mIsTimerVisible) outState.putString(DURATION, binding.progressBar.max.toString())
     }
 
     private fun isValidInput(): Boolean {
         val inputText = binding.etInput.text.toString()
         return inputText.isNotEmpty() && inputText != "0"
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (isFinishing) {
+            Log.d("Event: ", "Activity died")
+        } else Log.d("Event: ", "Activity rotated")
     }
 }
 
